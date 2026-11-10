@@ -580,7 +580,7 @@ def generate_poster(
         False, "--force", "-f", help="Regenerate even if poster exists"
     ),
 ) -> None:
-    """Generate a poster for a collection using OpenAI gpt-image-1.5."""
+    """Generate a poster for a collection using OpenAI gpt-image-2.6-sunburst."""
     settings = get_settings()
     setup_logging(level=settings.log_level)
 
