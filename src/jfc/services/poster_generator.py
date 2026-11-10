@@ -1,4 +1,4 @@
-"""Automatic poster generation using OpenAI gpt-image-1.5 and GPT-5.1."""
+"""Automatic poster generation using OpenAI gpt-image-2.6-sunburst and GPT-5.1."""
 
 import base64
 import json
@@ -22,7 +22,7 @@ from jfc.models.media import MediaItem
 # =============================================================================
 
 MODEL_GPT_5_1 = "gpt-5.1"  # For scene descriptions and visual signatures
-MODEL_GPT_IMAGE_1_5 = "gpt-image-1.5"
+MODEL_GPT_IMAGE = "gpt-image-2.6-sunburst"
 MODEL_DALL_E_3 = "dall-e-3"
 
 # Timeout pour les appels API
@@ -55,7 +55,7 @@ TMDB_GENRES = {
 
 
 class PosterGenerator:
-    """Generate collection posters using OpenAI gpt-image-1.5 and GPT-5.1."""
+    """Generate collection posters using OpenAI gpt-image-2.6-sunburst and GPT-5.1."""
 
     # Package templates directory (fallback)
     PACKAGE_TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
@@ -277,7 +277,7 @@ class PosterGenerator:
             category: Category type (FILMS, SÉRIES, CARTOONS)
             library: Library name for folder organization
             force_regenerate: Regenerate even if poster exists
-            use_dalle3: Use DALL-E 3 instead of gpt-image-1.5
+            use_dalle3: Use DALL-E 3 instead of gpt-image-2.6-sunburst
             explicit_refs: Include show titles in visual signatures
 
         Returns:
@@ -599,7 +599,7 @@ IMPORTANT FOR CARTOONS:
             visual_signatures: Visual signatures extracted from titles
             scene_prompt: Prompt sent to GPT-5.1
             scene_description: Response from GPT-5.1
-            image_prompt: Final prompt sent to gpt-image-1.5
+            image_prompt: Final prompt sent to gpt-image-2.6-sunburst
         """
         prompt_file = col_dir / "prompts" / f"{timestamp}.json"
 
@@ -623,7 +623,7 @@ IMPORTANT FOR CARTOONS:
             },
             "models": {
                 "scene_model": MODEL_GPT_5_1,
-                "image_model": MODEL_GPT_IMAGE_1_5,
+                "image_model": MODEL_GPT_IMAGE,
             },
         }
 
@@ -676,14 +676,14 @@ IMPORTANT FOR CARTOONS:
         use_dalle3: bool = False,
     ) -> Optional[Path]:
         """
-        Generate image using gpt-image-1.5 or DALL-E 3.
+        Generate image using gpt-image-2.6-sunburst or DALL-E 3.
 
         Args:
             prompt: The image generation prompt
             output_path: Path to save the generated image
-            use_dalle3: If True, use DALL-E 3 instead of gpt-image-1.5
+            use_dalle3: If True, use DALL-E 3 instead of gpt-image-2.6-sunburst
         """
-        model = MODEL_DALL_E_3 if use_dalle3 else MODEL_GPT_IMAGE_1_5
+        model = MODEL_DALL_E_3 if use_dalle3 else MODEL_GPT_IMAGE
         logger.debug(f"Calling {model} for image generation...")
         start_time = time.perf_counter()
 
@@ -700,9 +700,9 @@ IMPORTANT FOR CARTOONS:
                     response_format="b64_json",
                 )
             else:
-                # gpt-image-1.5 parameters
+                # gpt-image-2.6-sunburst parameters
                 response = await self.client.images.generate(
-                    model=MODEL_GPT_IMAGE_1_5,
+                    model=MODEL_GPT_IMAGE,
                     prompt=prompt,
                     n=1,
                     size="1024x1536",  # Vertical 2:3 ratio for posters
